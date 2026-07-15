@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Registers the CLI probe for issue #40891.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="magz_issue40891_repro" xsi:type="object">Magz\Issue40891\Console\ReproduceCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!--
+        Simulates a conforming third-party plugin (Smile ElasticSuite-style) that
+        types canBeShowInCategory's argument as int per the core docblock. This is
+        what makes issue #40891 reproduce: core passes null, the plugin gets a
+        TypeError at the interception boundary.
+    -->
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="magz_issue40891_simulate_elasticsuite"
+                type="Magz\Issue40891\Plugin\SimulateElasticsuiteCategoryPlugin"/>
+    </type>
+</config>
